@@ -10,7 +10,6 @@ public class MonsterLocomotion : MonoBehaviour
     public Camera cam;
     public GameObject pivot;
     public GameObject head;
-    public GameObject barricade;
 
     Animator anim;
 
@@ -68,7 +67,6 @@ public class MonsterLocomotion : MonoBehaviour
     {
         if(collider.tag == "Player" && !stun)
         {
-            barricade.SetActive(false);
             encounter = true;
             anim.speed = 1f;
             anim.SetBool("isWalk", false);
