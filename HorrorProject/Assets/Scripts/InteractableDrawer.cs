@@ -5,7 +5,6 @@ using UnityEngine;
 public class InteractableDrawer : Interactable
 {
     GameObject uiPointer;
-    UIControl uIControl;
 
     public string text;
     bool isOpen = false;
@@ -13,13 +12,11 @@ public class InteractableDrawer : Interactable
     private void Start()
     {
         uiPointer = GameObject.Find("Pointer");
-        uIControl = uiPointer.GetComponent<UIControl>();
     }
 
     public override void OnFocus()
     {
-        if (!isOpen)
-            uIControl.ItemText(text);
+
     }
 
     public override void OnInteract()
@@ -30,7 +27,7 @@ public class InteractableDrawer : Interactable
 
     public override void OnLoseFocus()
     {
-        uIControl.ItemText(" ");
+
     }
 
     IEnumerator DoorActive()

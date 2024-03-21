@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class LightControl : MonoBehaviour
 {
-    public GameObject flashLight;
+    public Camera playerCamera;
     public GameObject batteryUI;
-    public GameObject worldLight;
 
-    public Light lightCom;
-    bool isOn;
+    private Light lightCom;
+    private bool isOn;
 
     public float rotSpeed;
     public float lightIntensity;
+    public float posAdj;
 
     void Start()
     {
-        lightCom = flashLight.GetComponentInChildren<Light>();
+        lightCom = GetComponent<Light>();
         lightCom.intensity = 0;
     }
 
     void Update()
     {
-        flashLight.transform.position = transform.position;
-        flashLight.transform.rotation = Quaternion.Lerp(flashLight.transform.rotation, transform.rotation, Time.deltaTime * rotSpeed);
+        transform.position = playerCamera.transform.position - transform.forward * posAdj;
+        transform.rotation = Quaternion.Lerp(transform.rotation, playerCamera.transform.rotation, Time.deltaTime * rotSpeed);
         if (batteryUI.GetComponent<BatteryManager>().slider.value != 0)
         {
             if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -56,28 +56,6 @@ public class LightControl : MonoBehaviour
             batteryUI.GetComponent<BatteryManager>().fill.color = Color.white;
     }
 
-    private void OnTriggerStay(Collider collider)
-    {
-        if (collider.tag == "Monster" && isOn)
-        {
-            if(collider.GetComponentInParent<MonsterLocomotion>().agent.speed == 6)
-            {
-                batteryUI.GetComponent<BatteryManager>().slider.value -= Time.deltaTime * 0.05f;
-                collider.GetComponentInParent<MonsterLocomotion>().Stun();
-                StartCoroutine("Blink");
-                batteryUI.GetComponent<BatteryManager>().fill.color = Color.red;
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider collider)
-    {
-        if (collider.tag == "Monster")
-        {
-            batteryUI.GetComponent<BatteryManager>().fill.color = Color.white;
-        }
-    }
-
     IEnumerator LightOn()
     {
         for(int i = 0; i< 10; i++)
@@ -85,15 +63,5 @@ public class LightControl : MonoBehaviour
             lightCom.intensity += lightIntensity / 10;
             yield return new WaitForSeconds(0.01f);
         }
-    }
-
-    IEnumerator Blink()
-    {
-        lightCom.intensity = 0;
-        yield return new WaitForSeconds(0.1f);
-        lightCom.intensity = lightIntensity;
-        yield return new WaitForSeconds(0.1f);
-        if (!isOn)
-           lightCom.intensity = 0;
     }
 }
