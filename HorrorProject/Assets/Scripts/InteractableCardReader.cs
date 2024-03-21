@@ -7,8 +7,6 @@ public class InteractableCardReader : Interactable
     public GameObject assinedDoor;
     public GameObject uiPointer;
 
-    UIControl uIControl;
-
     public Material[] mat = new Material[3];
     public string roomName;
     public string assignedCardName;
@@ -18,7 +16,7 @@ public class InteractableCardReader : Interactable
 
     private void Start()
     {
-        uIControl = uiPointer.GetComponent<UIControl>();
+
     }
 
     private void Update()
@@ -35,35 +33,25 @@ public class InteractableCardReader : Interactable
 
     public override void OnFocus()
     {
-        uIControl.ItemText(roomName);
+
     }
 
     public override void OnInteract()
     {
         timer = 2f;
         Material[] myMaterial = gameObject.GetComponent<MeshRenderer>().materials;
+       
+        myMaterial[1] = mat[1];
+        StartCoroutine("DoorActive");
 
-        if (uIControl.items[uIControl.slot] != null)
-        {
-            if(uIControl.items[uIControl.slot].GetComponent<InteractableObject>().item.name == assignedCardName)
-            {
-                myMaterial[1] = mat[1];
-                StartCoroutine("DoorActive");
-            }
-            else
-                myMaterial[1] = mat[0];
+        //myMaterial[1] = mat[0]; disable
 
-        }
-        else
-        {
-            myMaterial[1] = mat[0];
-        }
         gameObject.GetComponent<MeshRenderer>().materials = myMaterial;
     }
 
     public override void OnLoseFocus()
     {
-        uIControl.ItemText(" ");
+
     }
 
     IEnumerator DoorActive()

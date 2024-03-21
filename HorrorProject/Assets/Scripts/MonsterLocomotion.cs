@@ -39,8 +39,8 @@ public class MonsterLocomotion : MonoBehaviour
             anim.SetBool("isRun", false);
             agent.speed = 2;
             timer = 10f;
-            agent.SetDestination(new Vector3(target.transform.position.x + randValueX,
-                target.transform.position.y, target.transform.position.z + randValueZ));
+            //agent.SetDestination(new Vector3(target.transform.position.x + randValueX,
+                //target.transform.position.y, target.transform.position.z + randValueZ));
         }
         else
             timer -= Time.deltaTime;
@@ -54,15 +54,6 @@ public class MonsterLocomotion : MonoBehaviour
         }
     }
 
-    public void Stun()
-    {
-        if(!stun)
-            StartCoroutine("SlowDown");
-        stun = true;
-        timer = 2f;
-        agent.SetDestination(transform.position);    
-    }
-
     private void OnTriggerStay(Collider collider)
     {
         if(collider.tag == "Player" && !stun)
@@ -73,7 +64,7 @@ public class MonsterLocomotion : MonoBehaviour
             anim.SetBool("isRun", true);
             agent.speed = 6;
             timer = 1f;
-            agent.SetDestination(target.position);
+            //agent.SetDestination(target.position);
 
             //충돌 애니매이션 출력
             if((target.position - transform.position).magnitude < 2 && !dead)
@@ -89,25 +80,13 @@ public class MonsterLocomotion : MonoBehaviour
         {
             anim.SetBool("isRun", false);
             agent.speed = 2;
-            agent.SetDestination(transform.position);
+            //agent.SetDestination(transform.position);
         }
-    }
-
-    IEnumerator SlowDown()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            anim.SetFloat("animSpeed", 1 - i / 10f);
-            yield return new WaitForSeconds(0.01f);
-        }
-        anim.SetFloat("animSpeed", 0);
     }
 
     IEnumerator DeadScene()
     {
         target.GetComponent<PlayerControl>().enabled = false;
-        cam.GetComponent<LightControl>().lightCom.intensity = 0;
-        cam.GetComponent<LightControl>().enabled = false;
         cam.transform.parent = null;
         dead = true;
         

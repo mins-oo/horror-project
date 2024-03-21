@@ -5,22 +5,17 @@ using UnityEngine;
 public class InteractableDrawerDesk : Interactable
 {
     GameObject uiPointer;
-    UIControl uIControl;
 
     int isOpen = 0;
 
     private void Start()
     {
         uiPointer = GameObject.Find("Pointer");
-        uIControl = uiPointer.GetComponent<UIControl>();
     }
 
     public override void OnFocus()
     {
-        if (isOpen == 0)
-            uIControl.ItemText("open");
-        else if (isOpen == 1)
-            uIControl.ItemText("close");
+
     }
 
     public override void OnInteract()
@@ -33,7 +28,7 @@ public class InteractableDrawerDesk : Interactable
 
     public override void OnLoseFocus()
     {
-        uIControl.ItemText(" ");
+
     }
 
     IEnumerator DoorActive()
